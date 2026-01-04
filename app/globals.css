@@ -1,26 +1,82 @@
-@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warm, organic palette */
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "Playfair Display", serif;
+
+  /* Creamy background */
+  --background: 40 50% 98%;
+  --foreground: 28 35% 20%; /* Dark earthy brown */
+
+  /* Forest Green Primary */
+  --primary: 150 45% 30%;
+  --primary-foreground: 40 50% 98%;
+
+  /* Sage Green Secondary */
+  --secondary: 120 25% 85%;
+  --secondary-foreground: 150 45% 25%;
+
+  /* Warm Accent (Terracotta/Orange) */
+  --accent: 32 80% 55%;
+  --accent-foreground: 40 50% 98%;
+
+  --muted: 40 20% 94%;
+  --muted-foreground: 28 15% 50%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 28 35% 20%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 28 35% 20%;
+
+  --border: 40 10% 85%;
+  --input: 40 10% 85%;
+  --ring: 150 45% 30%;
+
+  --radius: 0.75rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  /* Replace invalid @apply border-border with CSS border using variable */
+  * {
+    border-width: 1px;
+    border-style: solid;
+    border-color: hsl(var(--border));
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight text-primary;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.text-shadow-sm {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.glass-nav {
+  background: rgba(255, 253, 250, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.leaf-pattern {
+  background-image: radial-gradient(#2d5a3f 0.5px, transparent 0.5px),
+    radial-gradient(#2d5a3f 0.5px, #fdfbf7 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0.03;
 }
