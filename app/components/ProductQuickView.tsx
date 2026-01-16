@@ -11,7 +11,7 @@ import { Input } from "../components/ui/input";
 import { useState } from "react";
 import { ShoppingBag, Minus, Plus } from "lucide-react";
 import { motion } from "framer-motion";
-import { Product } from "../schema/schema";
+import { Product } from "../../schema/schema";
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -71,9 +71,8 @@ export function ProductQuickView({
               <div>
                 <p className="text-sm text-muted-foreground">Stock</p>
                 <p
-                  className={`font-semibold ${
-                    product.stock > 0 ? "text-green-600" : "text-red-600"
-                  }`}
+                  className={`font-semibold ${product.stock > 0 ? "text-green-600" : "text-red-600"
+                    }`}
                 >
                   {product.stock > 0
                     ? `${product.stock} Available`

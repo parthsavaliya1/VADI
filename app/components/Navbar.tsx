@@ -3,16 +3,21 @@ import { ShoppingBasket, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-// import { useCart } from "@/context/CartContext";
-// import { CartSidebar } from "./CartSidebar";
+import { useCart } from "@/context/CartContext";
+import { CartSidebar } from "./CartSidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { User, LogOut } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+
 const logo = "/images/vadi.png";
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  //   const { items } = useCart();
+  const { data: session } = useSession();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { items } = useCart();
   const pathname = usePathname();
 
   const navLinks = [
@@ -25,6 +30,7 @@ export function Navbar() {
     <nav className="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
+
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer group">
@@ -43,22 +49,19 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
-                <span
-                  className={`
+                <span className={`
                   text-sm font-medium cursor-pointer transition-colors duration-200
-                  ${
-                    pathname === link.href
-                      ? "text-primary border-b-2 border-primary"
-                      : "text-foreground/80 hover:text-primary"
-                  }
-                `}
-                >
+                  ${pathname === link.href
+
+                    ? "text-primary border-b-2 border-primary"
+                    : "text-foreground/80 hover:text-primary"}
+                `}>
                   {link.label}
                 </span>
               </Link>
             ))}
 
-            {/* <Button
+            <Button
               variant="outline"
               className="rounded-full border-primary/20 hover:border-primary text-primary hover:bg-primary/5 gap-2 relative"
               onClick={() => setIsCartOpen(true)}
@@ -70,11 +73,39 @@ export function Navbar() {
                   {items.length}
                 </span>
               )}
-            </Button> */}
+            </Button>
+            {/* User Menu */}
+            {session && (
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(prev => !prev)}
+                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition"
+                >
+                  <User className="w-5 h-5 text-primary" />
+                </button>
+
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-3 w-44 bg-white rounded-xl shadow-lg border border-border/50 overflow-hidden z-50">
+                    <div className="px-4 py-3 text-sm text-muted-foreground">
+                      {session.user?.email}
+                    </div>
+
+                    <button
+                      onClick={() => signOut()}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
           </div>
 
           {/* Mobile Menu Toggle */}
-          {/* <div className="md:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
@@ -88,6 +119,15 @@ export function Navbar() {
                 </span>
               )}
             </Button>
+            {session && (
+              <button
+                onClick={() => signOut()}
+                className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center"
+              >
+                <User className="w-5 h-5 text-primary" />
+              </button>
+            )}
+
 
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -101,21 +141,12 @@ export function Navbar() {
                     <img src={logo} alt="Logo" className="h-16 w-auto" />
                   </div>
                   {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span
-                        className={`
+                    <Link key={link.href} href={link.href} onClick={() => setIsMobileMenuOpen(false)}>
+                      <span className={`
                         text-xl font-display font-medium block text-center py-2 cursor-pointer
-                        ${
-                          location === link.href
-                            ? "text-primary"
-                            : "text-foreground"
-                        }
-                      `}
-                      >
+                        ${pathname === link.href
+                          ? "text-primary" : "text-foreground"}
+                      `}>
                         {link.label}
                       </span>
                     </Link>
@@ -123,11 +154,11 @@ export function Navbar() {
                 </div>
               </SheetContent>
             </Sheet>
-          </div> */}
+          </div>
         </div>
       </div>
 
-      {/* <CartSidebar open={isCartOpen} onOpenChange={setIsCartOpen} /> */}
+      <CartSidebar open={isCartOpen} onOpenChange={setIsCartOpen} />
     </nav>
   );
 }

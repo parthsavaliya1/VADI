@@ -14,7 +14,7 @@ import {
   CardDescription,
 } from "../components/ui/card";
 import { MapPin, Phone, Mail } from "lucide-react";
-import type { ContactMessage } from "../schema/schema";
+import type { ContactMessage } from "../../schema/schema";
 
 export default function Contact() {
   const {

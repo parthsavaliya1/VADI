@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { insertProductSchema, Product } from "@/app/schema/schema";
+import { insertProductSchema, Product } from "@/schema/schema";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

@@ -9,14 +9,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./components/ui/input";
 import { Button } from "./components/ui/button";
 import Link from "next/link";
-import { ContactMessage, contactMessageSchema } from "./schema/schema";
-import { useContactForm, useProducts } from "./hooks/use-products";
+import { ContactMessage, contactMessageSchema } from "../schema/schema";
+import { useContactForm } from "../hooks/use-products";
+import { STATIC_PRODUCTS } from "@/lib/data";
 
 const logo = "/images/vadi.png";
 
 export default function Home() {
-  const { data: products, isLoading } = useProducts();
-  const featuredProducts = products?.filter((p) => p.isFeatured) || [];
+  const products = STATIC_PRODUCTS;
+  const isLoading = false;
+
+  const featuredProducts = products.filter(
+    (product) => product.isFeatured
+  );
 
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
@@ -331,6 +336,8 @@ function NewsletterSection() {
           </p>
         )}
       </div>
+
+
     </section>
   );
 }

@@ -6,8 +6,10 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { useState } from "react";
 import { ProductQuickView } from "./ProductQuickView";
-import { Product } from "../schema/schema";
-// import { useCart } from "@/context/CartContext";
+import { Product } from "../../schema/schema";
+import { useCart } from "@/context/CartContext";
+import { signIn, useSession } from "next-auth/react";
+import { AuthModal } from "./AuthModal";
 
 interface ProductCardProps {
   product: Product;
@@ -16,10 +18,16 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quickViewOpen, setQuickViewOpen] = useState(false);
-  //   const { addItem } = useCart();
+  const [showAuth, setShowAuth] = useState(false);
+  const { addItem } = useCart();
+  const { data: session } = useSession();
 
   const handleQuickAdd = () => {
-    // addItem(product, 1);
+    if (!session) {
+      setShowAuth(true);
+      return;
+    }
+    addItem(product, 1);
   };
 
   return (
@@ -112,6 +120,15 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </motion.div>
+
+      {showAuth && (
+        <AuthModal
+          onSuccess={() => {
+            setShowAuth(false);
+            addItem(product, 1);
+          }}
+        />
+      )}
 
       <ProductQuickView
         product={selectedProduct}

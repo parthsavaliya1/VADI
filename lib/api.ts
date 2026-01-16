@@ -1,6 +1,6 @@
 // src/lib/api.ts
 
-import { contactMessageSchema, insertProductSchema } from "@/app/schema/schema";
+import { contactMessageSchema, insertProductSchema } from "@/schema/schema";
 import { z } from "zod";
 
 /* =========================

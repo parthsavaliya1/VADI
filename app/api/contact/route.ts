@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { ContactMessage, contactMessageSchema } from "@/app/schema/schema";
+import { ContactMessage, contactMessageSchema } from "@/schema/schema";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
