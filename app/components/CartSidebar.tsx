@@ -3,6 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../components/ui/s
 import { Button } from "../components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { Trash2, ShoppingBag } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 interface CartSidebarProps {
@@ -12,6 +13,8 @@ interface CartSidebarProps {
 
 export function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     const { items, removeItem, updateQuantity, total, clear } = useCart();
+    const router = useRouter();
+
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -96,9 +99,16 @@ export function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                             <span>Total:</span>
                             <span className="text-primary">${total.toFixed(2)}</span>
                         </div>
-                        <Button className="w-full bg-primary hover:bg-primary/90 text-white h-12">
+                        <Button
+                            className="w-full bg-primary hover:bg-primary/90 text-white h-12"
+                            onClick={() => {
+                                onOpenChange(false);
+                                router.push("/checkout");
+                            }}
+                        >
                             Checkout
                         </Button>
+
                         <Button
                             variant="outline"
                             className="w-full"

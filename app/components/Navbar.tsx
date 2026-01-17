@@ -1,6 +1,6 @@
 "use client";
 import { ShoppingBasket, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useCart } from "@/context/CartContext";
@@ -19,6 +19,28 @@ export function Navbar() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { items } = useCart();
   const pathname = usePathname();
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    }
+
+    if (isUserMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
+
+
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -76,7 +98,8 @@ export function Navbar() {
             </Button>
             {/* User Menu */}
             {session && (
-              <div className="relative">
+              <div ref={userMenuRef} className="relative">
+
                 <button
                   onClick={() => setIsUserMenuOpen(prev => !prev)}
                   className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition"
@@ -97,6 +120,13 @@ export function Navbar() {
                       <LogOut className="w-4 h-4" />
                       Logout
                     </button>
+                    <Link
+                      href="/orders"
+                      className="block px-4 py-3 text-sm hover:bg-muted"
+                    >
+                      My Orders
+                    </Link>
+
                   </div>
                 )}
               </div>
@@ -120,12 +150,23 @@ export function Navbar() {
               )}
             </Button>
             {session && (
-              <button
-                onClick={() => signOut()}
-                className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center"
-              >
-                <User className="w-5 h-5 text-primary" />
-              </button>
+              <>
+                <button
+                  onClick={() => signOut()}
+                  className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center"
+                >
+                  <User className="w-5 h-5 text-primary" />
+                </button>
+                <Link
+                  href="/orders"
+                  className="block px-4 py-3 text-sm hover:bg-muted"
+                >
+                  My Orders
+                </Link>
+
+              </>
+
+
             )}
 
 
